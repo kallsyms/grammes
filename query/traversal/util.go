@@ -89,7 +89,7 @@ func (g *String) AddStep(step string, params ...interface{}) {
 		case float32, float64:
 			g.buffer.WriteString(fmt.Sprintf("%vf", t))
 		case string:
-			g.buffer.WriteString("'" + Escape(t) + "'")
+			g.buffer.WriteString(escape(t))
 		default:
 			g.buffer.WriteString(fmt.Sprintf("%v", t))
 		}
@@ -119,8 +119,4 @@ func gatherInts(params ...int) string {
 	default:
 		return ""
 	}
-}
-
-func Escape(t string) string {
-	return strings.ReplaceAll(strings.ReplaceAll(t, `\`, `\\`), `'`, `\'`)
 }
