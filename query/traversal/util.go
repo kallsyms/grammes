@@ -102,6 +102,40 @@ func (g *String) AddStep(step string, params ...interface{}) {
 	g.string += g.buffer.String()
 }
 
+func (g *String) addStepWithStrings(step string, params ...string) {
+	stepParams := make([]interface{}, len(params))
+	for i, p := range params {
+		stepParams[i] = p
+	}
+	g.AddStep(step, stepParams...)
+}
+
+func (g *String) addStepWithInterfaceAndStrings(step string, param interface{}, extra ...string) {
+	stepParams := make([]interface{}, len(extra)+1)
+	stepParams[0] = param
+	for i, p := range extra {
+		stepParams[i+1] = p
+	}
+	g.AddStep(step, stepParams...)
+}
+
+func (g *String) addStepWithTraversalStrings(step string, params ...String) {
+	stepParams := make([]interface{}, len(params))
+	for i, p := range params {
+		stepParams[i] = p
+	}
+	g.AddStep(step, stepParams...)
+}
+
+func (g *String) addStepWithInterfaceAndTraversalStrings(step string, param interface{}, extra ...String) {
+	stepParams := make([]interface{}, len(extra)+1)
+	stepParams[0] = param
+	for i, p := range extra {
+		stepParams[i+1] = p
+	}
+	g.AddStep(step, stepParams...)
+}
+
 func (g *String) commaSeperator(i int, params ...interface{}) {
 	if len(params) > i+1 {
 		if params[i+1] != nil {
