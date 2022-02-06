@@ -51,7 +51,7 @@ func TestExecuteRequest(t *testing.T) {
 		c, _ := Dial(dialer)
 		Convey("When 'executeRequest' is called with query", func() {
 			q := "testQuery"
-			var b, r map[string]string
+			var b, r map[string]interface{}
 			res, err := c.executeRequest(q, nil, b, r, nil)
 			Convey("Then err should be nil and the test result should be returned", func() {
 				So(err, ShouldBeNil)
@@ -102,7 +102,7 @@ func TestExecuteRequestErrorPreparingRequest(t *testing.T) {
 		copy(a[:], "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
 		return uuid.UUID(a), nil
 	}
-	gremPrepareRequest = func(string, *time.Duration, map[string]string, map[string]string, *uuid.UUID) (gremconnect.Request, string, error) {
+	gremPrepareRequest = func(string, *time.Duration, map[string]interface{}, map[string]interface{}, *uuid.UUID) (gremconnect.Request, string, error) {
 		var req gremconnect.Request
 		return req, "test", errors.New("ERROR")
 	}
@@ -110,8 +110,8 @@ func TestExecuteRequestErrorPreparingRequest(t *testing.T) {
 		dialer := &mockDialerStruct{}
 		c, _ := Dial(dialer)
 		Convey("When 'executeRequest' is called and preparing the request throws an error", func() {
-			bindings := make(map[string]string)
-			rebindings := make(map[string]string)
+			bindings := make(map[string]interface{})
+			rebindings := make(map[string]interface{})
 			_, err := c.executeRequest("testing", nil, bindings, rebindings, nil)
 			Convey("Then the error should be returned", func() {
 				So(err, ShouldNotBeNil)
@@ -136,8 +136,8 @@ func TestExecuteRequestErrorPackagingRequest(t *testing.T) {
 		dialer := &mockDialerStruct{}
 		c, _ := Dial(dialer)
 		Convey("When 'executeRequest' is called and packaging the request throws an error", func() {
-			bindings := make(map[string]string)
-			rebindings := make(map[string]string)
+			bindings := make(map[string]interface{})
+			rebindings := make(map[string]interface{})
 			_, err := c.executeRequest("testing", nil, bindings, rebindings, nil)
 			Convey("Then the error should be returned", func() {
 				So(err, ShouldNotBeNil)
@@ -173,8 +173,8 @@ func TestExecuteRequestErrorRetrievingResponse(t *testing.T) {
 			`
 		c, _ := Dial(dialer)
 		Convey("When 'executeRequest' is called and retrieving the response throws an error", func() {
-			bindings := make(map[string]string)
-			rebindings := make(map[string]string)
+			bindings := make(map[string]interface{})
+			rebindings := make(map[string]interface{})
 			_, err := c.executeRequest("testing", nil, bindings, rebindings, nil)
 			Convey("Then the error should be returned", func() {
 				So(err, ShouldNotBeNil)
@@ -295,8 +295,8 @@ func TestExecuteRequestErrorTimeout(t *testing.T) {
 		c, _ := Dial(dialer)
 		c.requestTimeout = time.Second
 		Convey("When 'executeRequest' is called and timeout occurs", func() {
-			bindings := make(map[string]string)
-			rebindings := make(map[string]string)
+			bindings := make(map[string]interface{})
+			rebindings := make(map[string]interface{})
 			_, err := c.executeRequest("testing", nil, bindings, rebindings, nil)
 			Convey("Then the error should be returned", func() {
 				So(err, ShouldNotBeNil)
@@ -321,8 +321,8 @@ func TestExecuteRequestErrorQueryTimeout(t *testing.T) {
 		c.requestTimeout = 10 * time.Minute
 		queryTimeout := time.Second
 		Convey("When 'executeRequest' is called and timeout occurs", func() {
-			bindings := make(map[string]string)
-			rebindings := make(map[string]string)
+			bindings := make(map[string]interface{})
+			rebindings := make(map[string]interface{})
 			_, err := c.executeRequest("testing", &queryTimeout, bindings, rebindings, nil)
 			Convey("Then the error should be returned", func() {
 				So(err, ShouldNotBeNil)

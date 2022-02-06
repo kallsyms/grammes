@@ -2,6 +2,7 @@ package manager
 
 import (
 	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/northwesternmutual/grammes/logging"
 	"github.com/northwesternmutual/grammes/query"
@@ -10,13 +11,13 @@ import (
 
 // sessionManager handles the sessions actions to the server.
 type sessionManager struct {
-	logger         logging.Logger
-	e executor
+	logger logging.Logger
+	e      executor
 }
 
 type session struct {
 	id *uuid.UUID
-	e executor
+	e  executor
 }
 
 // newSessionManager returns a new Session Manager that
@@ -24,7 +25,7 @@ type session struct {
 func newSessionManager(logger logging.Logger, executor executor) *sessionManager {
 	return &sessionManager{
 		logger: logger,
-		e: executor,
+		e:      executor,
 	}
 }
 
@@ -37,14 +38,14 @@ func (s *sessionManager) NewNoopSession() Session {
 func (s *sessionManager) NewSession() Session {
 	id := uuid.New()
 	return &session{
-		e: s.e,
+		e:  s.e,
 		id: &id,
 	}
 }
 
 func (s *sessionManager) GetSession(sessionId uuid.UUID) Session {
 	return &session{
-		e: s.e,
+		e:  s.e,
 		id: &sessionId,
 	}
 }
@@ -78,7 +79,7 @@ func (s *sessionManager) WithSession(ss Session, f func(Session) error, closeOnD
 }
 
 func (s *session) ExecuteStringQuery(stringQuery string) (res [][]byte, err error) {
-	return s.e(stringQuery, nil, map[string]string{}, map[string]string{}, s.id)
+	return s.e(stringQuery, nil, map[string]interface{}{}, map[string]interface{}{}, s.id)
 }
 
 func (s *session) ExecuteQuery(queryObj query.Query) (res [][]byte, err error) {
@@ -90,7 +91,7 @@ func (s *session) Close() error {
 		return nil
 	}
 
-	_, err := s.e("", nil, map[string]string{}, map[string]string{}, s.id)
+	_, err := s.e("", nil, map[string]interface{}{}, map[string]interface{}{}, s.id)
 	return err
 }
 

@@ -63,11 +63,11 @@ type WebSocket struct {
 func (ws *WebSocket) Connect() error {
 	var err error
 	dialer := websocket.Dialer{
-		WriteBufferSize:     ws.writeBufferSize,
-		WriteBufferResizing: ws.writeBufferResizing,
-		ReadBufferSize:      ws.readBufferSize,
-		HandshakeTimeout:    ws.handshakeTimeout,
-		EnableCompression:   ws.enableCompression,
+		WriteBufferSize: ws.writeBufferSize,
+		//WriteBufferResizing: ws.writeBufferResizing,
+		ReadBufferSize:    ws.readBufferSize,
+		HandshakeTimeout:  ws.handshakeTimeout,
+		EnableCompression: ws.enableCompression,
 	}
 
 	// Check if the host address already has the proper

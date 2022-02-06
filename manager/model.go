@@ -64,7 +64,7 @@ func unmarshalID(data [][]byte) (id interface{}, err error) {
 }
 
 // executor is the function type that is used when passing in executeRequest.
-type executor func(string, *time.Duration, map[string]string, map[string]string, *uuid.UUID) ([][]byte, error)
+type executor func(string, *time.Duration, map[string]interface{}, map[string]interface{}, *uuid.UUID) ([][]byte, error)
 
 // executor is the function type that is used when passing in ExecuteStringQuery.
 type stringExecutor func(string) ([][]byte, error)
@@ -155,20 +155,20 @@ type ExecuteQuerier interface {
 	// ExecuteStringQuery will execute a string query and return its raw result.
 	ExecuteStringQuery(stringQuery string) (res [][]byte, err error)
 	// ExecuteBoundQuery will execute a query object with bindings and return its raw result.
-	ExecuteBoundQuery(queryObj query.Query, bindings map[string]string, rebindings map[string]string) (res [][]byte, err error)
+	ExecuteBoundQuery(queryObj query.Query, bindings, rebindings map[string]interface{}) (res [][]byte, err error)
 	// ExecuteBoundStringQuery will execute a string query with bindings and return its raw result.
-	ExecuteBoundStringQuery(stringQuery string, bindings map[string]string, rebindings map[string]string) (res [][]byte, err error)
+	ExecuteBoundStringQuery(stringQuery string, bindings, rebindings map[string]interface{}) (res [][]byte, err error)
 
 	// ExecuteQueryWithTimeout will execute a query object and return its raw result within a specified timeout.
 	ExecuteQueryWithTimeout(queryObj query.Query, queryTimeout *time.Duration) (res [][]byte, err error)
 	// ExecuteStringQueryWithTimeout will execute a string query and return its raw result within a specified timeout.
 	ExecuteStringQueryWithTimeout(stringQuery string, queryTimeout *time.Duration) (res [][]byte, err error)
 	// ExecuteBoundQueryWithTimeout will execute a query object with bindings and return its raw result within a specified timeout.
-	ExecuteBoundQueryWithTimeout(queryObj query.Query, queryTimeout *time.Duration, bindings map[string]string, rebindings map[string]string) (res [][]byte, err error)
+	ExecuteBoundQueryWithTimeout(queryObj query.Query, queryTimeout *time.Duration, bindings, rebindings map[string]interface{}) (res [][]byte, err error)
 	// ExecuteBoundStringQueryWithTimeout will execute a string query with bindings and return its raw result within a specified timeout.
-	ExecuteBoundStringQueryWithTimeout(stringQuery string, queryTimeout *time.Duration, bindings map[string]string, rebindings map[string]string) (res [][]byte, err error)
+	ExecuteBoundStringQueryWithTimeout(stringQuery string, queryTimeout *time.Duration, bindings, rebindings map[string]interface{}) (res [][]byte, err error)
 	// ExecuteBoundSessionQueryWithTimeout will execute a string query with bindings in a specific session and return its raw result within a specified timeout.
-	ExecuteBoundSessionQueryWithTimeout(stringQuery string, queryTimeout *time.Duration, bindings map[string]string, rebindings map[string]string, sessionId *uuid.UUID) (res [][]byte, err error)
+	ExecuteBoundSessionQueryWithTimeout(stringQuery string, queryTimeout *time.Duration, bindings, rebindings map[string]interface{}, sessionId *uuid.UUID) (res [][]byte, err error)
 }
 
 type Session interface {

@@ -38,7 +38,7 @@ const (
 	clientTimeoutGrace = 20 * time.Second
 )
 
-func (c *Client) executeRequest(query string, queryTimeout *time.Duration, bindings, rebindings map[string]string, sessionId *uuid.UUID) ([][]byte, error) {
+func (c *Client) executeRequest(query string, queryTimeout *time.Duration, bindings, rebindings map[string]interface{}, sessionId *uuid.UUID) ([][]byte, error) {
 	resolvedQueryTimeout := c.requestTimeout
 
 	if queryTimeout != nil {
@@ -74,7 +74,7 @@ func (c *Client) executeRequest(query string, queryTimeout *time.Duration, bindi
 	}
 
 	c.resultMessenger.Store(id, make(chan int, 1))
-	c.dispatchRequest(msg)              // send the request.
+	c.dispatchRequest(msg)                                                       // send the request.
 	resp, err := c.retrieveResponse(id, resolvedQueryTimeout+clientTimeoutGrace) // retrieve the response from the gremlin server
 	if err != nil {
 		c.logger.Error("retrieving response",

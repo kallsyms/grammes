@@ -15,5 +15,3 @@ require (
 	go.uber.org/zap v1.9.1
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
 )
-
-replace github.com/gorilla/websocket v1.4.2 => github.com/wiz-sec/websocket v1.4.3-0.20210824141715-858e166c8e75

@@ -21,12 +21,13 @@
 package manager
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/northwesternmutual/grammes/gremconnect"
 	"github.com/northwesternmutual/grammes/gremerror"
 	"github.com/northwesternmutual/grammes/logging"
 	"github.com/northwesternmutual/grammes/query"
-	"time"
 )
 
 // Query handles the querying actions to the server.
@@ -59,7 +60,7 @@ func (m *queryManager) ExecuteQuery(query query.Query) ([][]byte, error) {
 
 // ExecuteQueryWithTimeout behaves like ExecuteQuery, with a supplied query timeout
 func (m *queryManager) ExecuteQueryWithTimeout(query query.Query, queryTimeout *time.Duration) ([][]byte, error) {
-	return m.ExecuteBoundStringQueryWithTimeout(query.String(), queryTimeout, map[string]string{}, map[string]string{})
+	return m.ExecuteBoundStringQueryWithTimeout(query.String(), queryTimeout, map[string]interface{}{}, map[string]interface{}{})
 }
 
 // ExecuteStringQuery takes a string query and
@@ -70,7 +71,7 @@ func (m *queryManager) ExecuteStringQuery(query string) ([][]byte, error) {
 
 // ExecuteStringQueryWithTimeout behaves like ExecuteStringQuery, with a supplied query timeout
 func (m *queryManager) ExecuteStringQueryWithTimeout(query string, queryTimeout *time.Duration) ([][]byte, error) {
-	return m.ExecuteBoundStringQueryWithTimeout(query, queryTimeout, map[string]string{}, map[string]string{})
+	return m.ExecuteBoundStringQueryWithTimeout(query, queryTimeout, map[string]interface{}{}, map[string]interface{}{})
 }
 
 // Query Bindings:
@@ -78,27 +79,27 @@ func (m *queryManager) ExecuteStringQueryWithTimeout(query string, queryTimeout 
 
 // ExecuteBoundQuery takes a query object and bindings to allow
 // for simplified queries to the gremlin server.
-func (m *queryManager) ExecuteBoundQuery(query query.Query, bindings, rebindings map[string]string) ([][]byte, error) {
+func (m *queryManager) ExecuteBoundQuery(query query.Query, bindings, rebindings map[string]interface{}) ([][]byte, error) {
 	return m.ExecuteBoundQueryWithTimeout(query, nil, bindings, rebindings)
 }
 
 // ExecuteBoundQueryWithTimeout behaves like ExecuteBoundQuery, with a supplied query timeout
-func (m *queryManager) ExecuteBoundQueryWithTimeout(query query.Query, queryTimeout *time.Duration, bindings, rebindings map[string]string) ([][]byte, error) {
+func (m *queryManager) ExecuteBoundQueryWithTimeout(query query.Query, queryTimeout *time.Duration, bindings, rebindings map[string]interface{}) ([][]byte, error) {
 	return m.ExecuteBoundStringQueryWithTimeout(query.String(), queryTimeout, bindings, rebindings)
 }
 
 // ExecuteBoundStringQuery uses bindings and rebindings to allow
 // for simplified queries to the gremlin server.
-func (m *queryManager) ExecuteBoundStringQuery(query string, bindings, rebindings map[string]string) ([][]byte, error) {
+func (m *queryManager) ExecuteBoundStringQuery(query string, bindings, rebindings map[string]interface{}) ([][]byte, error) {
 	return m.ExecuteBoundStringQueryWithTimeout(query, nil, bindings, rebindings)
 }
 
 // ExecuteBoundStringQueryWithTimeout behaves like ExecuteBoundStringQuery, with a supplied query timeout
-func (m *queryManager) ExecuteBoundStringQueryWithTimeout(query string, queryTimeout *time.Duration, bindings map[string]string, rebindings map[string]string) ([][]byte, error) {
+func (m *queryManager) ExecuteBoundStringQueryWithTimeout(query string, queryTimeout *time.Duration, bindings, rebindings map[string]interface{}) ([][]byte, error) {
 	return m.ExecuteBoundSessionQueryWithTimeout(query, queryTimeout, bindings, rebindings, nil)
 }
 
-func (m *queryManager) ExecuteBoundSessionQueryWithTimeout(query string, queryTimeout *time.Duration, bindings map[string]string, rebindings map[string]string, sessionId *uuid.UUID) ([][]byte, error) {
+func (m *queryManager) ExecuteBoundSessionQueryWithTimeout(query string, queryTimeout *time.Duration, bindings, rebindings map[string]interface{}, sessionId *uuid.UUID) ([][]byte, error) {
 	if m.dialer.IsDisposed() {
 		return nil, gremerror.ErrDisposedConnection
 	}
